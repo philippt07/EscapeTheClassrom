@@ -1,9 +1,9 @@
 #BlueJ class context
 comment0.target=Planet
-comment0.text=\r\n\ Die\ einzigen\ aktiven\ Akteure\ in\ der\ Roboterwelt\ sind\ die\ Roboter.\r\n\ Die\ Welt\ besteht\ aus\ 20\ *\ 10\ Feldern.\r\n
+comment0.text=\r\n\ Die\ einzigen\ aktiven\ Akteure\ in\ der\ Roboterwelt\ sind\ die\ Roboter.\r\n\ Die\ Welt\ besteht\ aus\ 10\ *\ 10\ Feldern.\r\n
 comment1.params=
 comment1.target=Planet()
-comment1.text=\r\n\ Erschaffe\ eine\ Welt\ mit\ 1\ *\ 1\ Zellen.\r\n
+comment1.text=\r\n\ Erschaffe\ eine\ Welt\ mit\ 20\ *\ 16\ Zellen.\r\n
 comment2.params=
 comment2.target=void\ prepare()
 comment2.text=\r\n\ Prepare\ the\ world\ for\ the\ start\ of\ the\ program.\r\n\ That\ is\:\ create\ the\ initial\ objects\ and\ add\ them\ to\ the\ world.\r\n
