@@ -60,5 +60,7 @@ public class Planet extends World
         addObject(rover15,3,4);
         Rover rover16 = new Rover();
         addObject(rover16,4,4);
+        rover14.setLocation(4,11);
+        removeObject(rover14);
     }
 }
