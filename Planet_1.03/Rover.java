@@ -1,59 +1,94 @@
-import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
-
+import greenfoot.*;
+import java.util.ArrayList;
+import java.util.List;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class Rover extends Actor
 {
-    private Display anzeige;
-
+    int z;
+    int gridX=48;
+    int gridY=48;
+    int tarX = 23;
+    int tarY = 13;
+    Node[][] nodes;
+    List<Node> openNodes   = new ArrayList<>();
+    List<Node> closedNodes = new ArrayList<>();
     public void act() 
     {
-       while(!markeVorhanden())
+       if(z==0)
+       {
+        nodes = new Node[gridX+1][gridY+1];
+        for(int x = gridX; x > 0; x--)
         {
-        while(!huegelVorhanden("rechts"))
-        {
-         fahre();
+            for(int y = gridY; y > 0; y--)
+            {
+                Node n = new Node();
+                getWorld().addObject(n, x, y);
+                n.thisX = x;
+                n.thisY = y;
+                nodes[x][y] = n;
+            }   
         }
-        drehe("rechts");
-        }// PHILLIP IST 
-    } 
+        z++;
+       }
+       findPath();
     
-    void Parken()
+    } 
+
+    public void findPath()
     {
-            int i = 0;
-        if( i < 1)
-        {
-        if(Greenfoot.isKeyDown("w"))
-        {
-         fahre();
-        }
-        
-        if(Greenfoot.isKeyDown("a"))
-        {
-         drehe("links");
-         i = 50;
-        }
-        
-        if(Greenfoot.isKeyDown("d"))
-        {
-         drehe("rechts");
-         i = 50;
-        }
-   
-               if(Greenfoot.isKeyDown("space"))
-        {
-         analysiereGestein();
-
-        i = 50; 
-        }
-        }
-        i--;
+        openNodes.clear();
+        closedNodes.clear();
+        openNodes.add(nodes[getX()][getY()]);
+        int ramX = getX();
+        int ramY = getY();
+        findeUmgebung(ramX,ramY);
+        while(!closedNodes.contains(nodes[tarX][tarY])&& !openNodes.isEmpty())
+       {
+            closedNodes.add(nodes[ramX][ramY]);
+            openNodes.remove(nodes[ramX][ramY]);
+            ramX = getLowestF().thisX;
+            ramY = getLowestF().thisY;
+            findeUmgebung(ramX,ramY);
+       }  
     }
+    
+    public Node getLowestF()
+    {
+            Node best = openNodes.get(0);
 
+            for(Node n : openNodes)
+            {
+               if(n.fCost < best.fCost)
+               best = n;
+            }
 
-    /**
-     * Der Rover bewegt sich ein Feld in Fahrtrichtung weiter.
-     * Sollte sich in Fahrtrichtung ein Objekt der Klasse Huegel befinden oder er sich an der Grenze der Welt befinden,
-     * dann erscheint eine entsprechende Meldung auf dem Display.
-     */
+            return best;
+    }
+    
+    public void findeUmgebung(int x, int y)
+    {
+        addOpen(x+1, y,x,y);
+        addOpen(x-1, y,x,y);
+        addOpen(x, y+1,x,y);
+        addOpen(x, y-1,x,y);
+        //addOpen(x+1, y+1,x,y);
+        //addOpen(x+1, y-1,x,y);
+        //addOpen(x-1, y+1,x,y);
+        //addOpen(x-1, y-1,x,y);
+    }
+    
+    public void addOpen(int x, int y,int px,int py)
+    {
+        if(x < 1 || x > gridX || y < 1 || y > gridY ) return;
+
+        Node n = nodes[x][y];
+
+        if(openNodes.contains(n) || closedNodes.contains(n)) return;
+
+        n.calculateCost(getX(), getY(), tarX, tarY);
+        n.parent = nodes[px][py];
+        openNodes.add(n);
+    }
+    
     public void fahre()
     {
         int posX = getX();
@@ -61,11 +96,11 @@ public class Rover extends Actor
 
         if(huegelVorhanden("vorne"))
         {
-            nachricht("Zu steil!");
+ 
         }
         else if(getRotation()==270 && getY()==1)
         {
-            nachricht("Ich kann mich nicht bewegen");
+     
         }
         else
         {
@@ -75,8 +110,38 @@ public class Rover extends Actor
 
         if(posX==getX()&&posY==getY()&&!huegelVorhanden("vorne"))
         {
-            nachricht("Ich kann mich nicht bewegen");
+      
         }
+    }
+    
+        public void executePath() {
+        List<Node> path = buildPath();
+
+        for(int i = 1; i < path.size(); i++) { 
+            Node next = path.get(i);
+
+            
+            int dx = next.thisX - getX();
+            int dy = next.thisY - getY();
+
+            if(dx > 0) setRotation(0);     
+            else if(dx < 0) setRotation(180); 
+            else if(dy > 0) setRotation(90);  
+            else if(dy < 0) setRotation(270); 
+
+            fahre(); 
+            
+        }
+    }
+    public List<Node> buildPath() {
+        List<Node> path = new ArrayList<>();
+        Node current = nodes[tarX][tarY];
+        
+        while(current != null) {
+            path.add(0, current); 
+            current = current.parent;
+        }
+        return path;
     }
 
     /**
@@ -95,7 +160,7 @@ public class Rover extends Actor
         }
         else
         {
-            nachricht("Befehl nicht korrekt!");
+            
         }
     }
 
@@ -107,7 +172,7 @@ public class Rover extends Actor
     {
         if(getOneIntersectingObject(Gestein.class)!=null)
         {
-            nachricht("Gestein gefunden!");
+           
             return true;
 
         }
@@ -160,7 +225,7 @@ public class Rover extends Actor
 
         if(richtung!="vorne" && richtung!="links" && richtung!="rechts")
         {
-            nachricht("Befehl nicht korrekt!");
+           
         }
 
         return false;
@@ -174,13 +239,13 @@ public class Rover extends Actor
     {
         if(gesteinVorhanden())
         {
-            nachricht("Gestein untersucht! Wassergehalt ist " + ((Gestein)getOneIntersectingObject(Gestein.class)).getWassergehalt()+"%.");
+          
             Greenfoot.delay(1);
             removeTouching(Gestein.class);
         }
         else 
         {
-            nachricht("Hier ist kein Gestein");
+           
         }
     }
 
@@ -212,38 +277,6 @@ public class Rover extends Actor
         {
             removeTouching(Marke.class);
         }
-    }
-
-    private void nachricht(String pText)
-    {
-        if(anzeige!=null)
-        {
-            anzeige.anzeigen(pText);
-            Greenfoot.delay(1);
-            anzeige.loeschen();
-        }
-    }
-
-    private void displayAusschalten()
-    {
-        getWorld().removeObject(anzeige);
-
-    }
-
-    protected void addedToWorld(World world)
-    {
-
-        setImage("images/rover.png");
-        world = getWorld();
-        anzeige = new Display();
-        anzeige.setImage("images/nachricht.png");
-        world.addObject(anzeige, 7, 0);
-        if(getY()==0)
-        {
-            setLocation(getX(),1);
-        }
-        anzeige.anzeigen("Ich bin bereit");
-
     }
 
     class Display extends Actor
