@@ -8,7 +8,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Node extends Actor
 {
-    
+    public Rover rover;
     public int thisX;
     public int thisY;
     
@@ -40,6 +40,12 @@ public class Node extends Actor
     public void setY(int y)
     {
       thisY = y;
+    }
+    
+    public void setTar()
+    {
+       rover.tarX = thisX;
+       rover.tarY = thisY;
     }
     
     public void calculateCost(int currX,int currY, int tarX, int tarY)
@@ -104,13 +110,14 @@ public class Node extends Actor
         //fCost
         
         
-       if(getOneIntersectingObject(Huegel.class)!=null)
+       if(getOneIntersectingObject(CornerOL.class)!=null||getOneIntersectingObject(CornerOR.class)!=null||getOneIntersectingObject(CornerUL.class)!=null || getOneIntersectingObject(CornerUR.class)!=null || getOneIntersectingObject(WandH.class)!=null||getOneIntersectingObject(WandV.class)!=null)
        {
             fCost = 1000000;
        }
        else
        {
         fCost = gCost + hCost;
+
        }
     }
 }

@@ -24,13 +24,17 @@ public class Rover extends Actor
                 getWorld().addObject(n, x, y);
                 n.thisX = x;
                 n.thisY = y;
+                n.rover = this;
                 nodes[x][y] = n;
             }   
         }
         z++;
        }
        findPath();
-    
+       if(getX() != tarX || getY() != tarY)
+       {
+        executePath();
+       }
     } 
 
     public void findPath()
@@ -70,10 +74,6 @@ public class Rover extends Actor
         addOpen(x-1, y,x,y);
         addOpen(x, y+1,x,y);
         addOpen(x, y-1,x,y);
-        //addOpen(x+1, y+1,x,y);
-        //addOpen(x+1, y-1,x,y);
-        //addOpen(x-1, y+1,x,y);
-        //addOpen(x-1, y-1,x,y);
     }
     
     public void addOpen(int x, int y,int px,int py)
@@ -87,6 +87,7 @@ public class Rover extends Actor
         n.calculateCost(getX(), getY(), tarX, tarY);
         n.parent = nodes[px][py];
         openNodes.add(n);
+
     }
     
     public void fahre()
@@ -94,11 +95,8 @@ public class Rover extends Actor
         int posX = getX();
         int posY = getY();
 
-        if(huegelVorhanden("vorne"))
-        {
- 
-        }
-        else if(getRotation()==270 && getY()==1)
+
+        if(getRotation()==270 && getY()==1)
         {
      
         }
@@ -108,10 +106,7 @@ public class Rover extends Actor
             Greenfoot.delay(1);
         }
 
-        if(posX==getX()&&posY==getY()&&!huegelVorhanden("vorne"))
-        {
-      
-        }
+
     }
     
         public void executePath() {
@@ -185,51 +180,7 @@ public class Rover extends Actor
      * Das Ergebnis wird auf dem Display angezeigt.
      * Sollte ein anderer Text (String) als "rechts", "links" oder "vorne" übergeben werden, dann erscheint eine entsprechende Meldung auf dem Display.
      */
-    public boolean huegelVorhanden(String richtung)
-    {
-        int rot = getRotation();
 
-        if (richtung=="vorne" && rot==0 || richtung=="rechts" && rot==270 || richtung=="links" && rot==90)
-        {
-            if(getOneObjectAtOffset(1,0,Huegel.class)!=null && ((Huegel)getOneObjectAtOffset(1,0,Huegel.class)).getSteigung() >1)
-            {
-                return true;
-            }
-        }
-
-        if (richtung=="vorne" && rot==180 || richtung=="rechts" && rot==90 || richtung=="links" && rot==270)
-        {
-            if(getOneObjectAtOffset(-1,0,Huegel.class)!=null && ((Huegel)getOneObjectAtOffset(-1,0,Huegel.class)).getSteigung() >1)
-            {
-                return true;
-            }
-        }
-
-        if (richtung=="vorne" && rot==90 || richtung=="rechts" && rot==0 || richtung=="links" && rot==180)
-        {
-            if(getOneObjectAtOffset(0,1,Huegel.class)!=null && ((Huegel)getOneObjectAtOffset(0,1,Huegel.class)).getSteigung() >1)
-            {
-                return true;
-            }
-
-        }
-
-        if (richtung=="vorne" && rot==270 || richtung=="rechts" && rot==180 || richtung=="links" && rot==0)
-        {
-            if(getOneObjectAtOffset(0,-1,Huegel.class)!=null && ((Huegel)getOneObjectAtOffset(0,-1,Huegel.class)).getSteigung() >1)
-            {
-                return true;
-            }
-
-        }
-
-        if(richtung!="vorne" && richtung!="links" && richtung!="rechts")
-        {
-           
-        }
-
-        return false;
-    }
 
     /**
      * Der Rover ermittelt den Wassergehalt des Gesteins auf seiner Position und gibt diesen auf dem Display aus.
