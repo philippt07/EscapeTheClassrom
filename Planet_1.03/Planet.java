@@ -14,7 +14,7 @@ public class Planet extends World
      */
     public Planet()
     {
-        super(1200, 800, 1);
+        super(736, 736, 1);
         setBackground("images/boden01.png");
         setPaintOrder(String.class, Rover.class, Marke.class, Gestein.class);
         Greenfoot.setSpeed(20); 
