@@ -4,10 +4,10 @@ import java.util.List;  // (World, Actor, GreenfootImage, Greenfoot and MouseInf
 public class Rover extends Actor
 {
     int z;
-    int gridX=48;
-    int gridY=48;
-    int tarX = 23;
-    int tarY = 13;
+    int gridX=10;
+    int gridY=10;
+    int tarX = 5;
+    int tarY = 5;
     Node[][] nodes;
     List<Node> openNodes   = new ArrayList<>();
     List<Node> closedNodes = new ArrayList<>();
