@@ -12,11 +12,13 @@ public class Lehrer extends Actor
     int z;
     int gridX=37;
     int gridY=23;
-    int tarX = 20;
-    int tarY = 20;
+    int tarX = 0;
+    int tarY = 0;
     Node[][] nodes;
     List<Node> openNodes   = new ArrayList<>();
     List<Node> closedNodes = new ArrayList<>();
+    List<Node> path = new ArrayList<>();
+    public int currentNode = 1;
     public void act() 
     {
        if(z==0)
@@ -38,16 +40,22 @@ public class Lehrer extends Actor
             }   
         }
         z++;
-        findPath();
+        findPath(20,20);
+        path = buildPath();
     }
+    if(getX() != nodes[tarX][tarY].getX()||getY() != nodes[tarX][tarY].getY())
+    executePath();
     }   
-        public void findPath()
+    
+    public void findPath(int setX, int setY)
     {
+        tarX=setX;
+        tarY=setY;
         openNodes.clear();
         closedNodes.clear();
-        openNodes.add(nodes[1][1]);
-        int ramX = 1;
-        int ramY = 1;
+        openNodes.add(nodes[getNearestNode().thisX][getNearestNode().thisY]);
+        int ramX = getNearestNode().thisX;
+        int ramY = getNearestNode().thisY;
         findeUmgebung(ramX,ramY);
         while(!closedNodes.contains(nodes[tarX][tarY])&& !openNodes.isEmpty())
        {
@@ -58,6 +66,18 @@ public class Lehrer extends Actor
             findeUmgebung(ramX,ramY);
        }  
     }
+    
+public Node getNearestNode()
+{
+    List<Node> nodes = getObjectsInRange(16, Node.class);
+
+    if (nodes.isEmpty())
+    {
+        return null;
+    }
+
+    return nodes.get(0);
+}
     
     public Node getLowestF()
     {
@@ -93,44 +113,40 @@ public class Lehrer extends Actor
         openNodes.add(n);
 
     }
-    
-    public void fahre()
-    {
-        int posX = getX();
-        int posY = getY();
 
-
-        if(getRotation()==270 && getY()==1)
-        {
-     
-        }
-        else
-        {
-            move(1);
-            Greenfoot.delay(1);
-        }
-
-
-    }
     
         public void executePath() {
-        List<Node> path = buildPath();
+            Node next = new Node();
 
-        for(int i = 1; i < path.size(); i++) { 
-            Node next = path.get(i);
+              next = path.get(currentNode);
+            
 
             
-            int dx = next.thisX - getX();
-            int dy = next.thisY - getY();
-
-            if(dx > 0) setRotation(0);     
-            else if(dx < 0) setRotation(180); 
-            else if(dy > 0) setRotation(90);  
-            else if(dy < 0) setRotation(270); 
-
-            fahre(); 
+            if(getX()!= next.getX()&& getY()!= next.getY())
+            {
+              if(getX() > next.getX())
+              {
+                this.setLocation(getX()-1,getY());
+              }
+              else
+              {
+                this.setLocation(getX()+1,getY()); 
+              }
+              
+              if(getY() > next.getY())
+              {
+                this.setLocation(getX(),getY()-1);
+              }
+              else
+              {
+                this.setLocation(getX(),getY()+1); 
+              }
             
-        }
+            }
+            else
+            {
+            currentNode++;
+            }
     }
     public List<Node> buildPath() {
         List<Node> path = new ArrayList<>();
@@ -141,5 +157,14 @@ public class Lehrer extends Actor
             current = current.parent;
         }
         return path;
+    }
+    
+    public void setCourse(int x, int y)
+    {
+        
+        path = buildPath();
+        openNodes.clear();
+        closedNodes.clear();
+        findPath(x,y);
     }
 }

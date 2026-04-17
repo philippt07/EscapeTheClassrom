@@ -44,8 +44,7 @@ public class Node extends Actor
     
     public void setTar()
     {
-       lehrer.tarX = thisX;
-       lehrer.tarY = thisY;
+       lehrer.setCourse(thisX,thisY);
     }
     
     public void calculateCost(int currX,int currY, int tarX, int tarY)
