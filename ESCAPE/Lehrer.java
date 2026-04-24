@@ -40,7 +40,7 @@ public class Lehrer extends Actor
             }   
         }
         z++;
-        findPath(20,20);
+        findPath(31,17);
         path = buildPath();
     }
     if(getX() != nodes[tarX][tarY].getX()||getY() != nodes[tarX][tarY].getY())
@@ -116,13 +116,11 @@ public Node getNearestNode()
 
     
         public void executePath() {
+            
             Node next = new Node();
-
-              next = path.get(currentNode);
+            next = path.get(currentNode);
             
-
-            
-            if(getX()!= next.getX()&& getY()!= next.getY())
+            if(getX()!= next.getX()|| getY()!= next.getY())
             {
               if(getX() > next.getX())
               {
@@ -163,8 +161,17 @@ public Node getNearestNode()
     {
         
         path = buildPath();
+        currentNode = 0;
         openNodes.clear();
         closedNodes.clear();
         findPath(x,y);
+        
+       for(int xx = gridX; x > 0; x--)
+        {
+            for(int yy = gridY; y > 0; y--)
+            {
+                nodes[xx][yy].parent = null;
+            }   
+        }
     }
 }
