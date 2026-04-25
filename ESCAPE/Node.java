@@ -32,19 +32,17 @@ public class Node extends Actor
     }
     }
     
-     public void setX(int x)
+    public void clear()
     {
-      thisX = x;
-    }
-    
-    public void setY(int y)
-    {
-      thisY = y;
+    parent = null;
+    fCost= 0;
+    setRotation(0);
     }
     
     public void setTar()
     {
        lehrer.setCourse(thisX,thisY);
+       
     }
     
     public void calculateCost(int currX,int currY, int tarX, int tarY)
@@ -116,7 +114,7 @@ public class Node extends Actor
        else
        {**/
         fCost = gCost + hCost;
-
+        setRotation(90);
        
     }
 }

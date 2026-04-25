@@ -21,32 +21,41 @@ public class Lehrer extends Actor
     public int currentNode = 1;
     public void act() 
     {
-       if(z==0)
-       {
-           this.setLocation(16,16);
-        nodes = new Node[gridX+1][gridY+1];
-        for(int x = gridX; x > 0; x--)
+        if(z==0)
         {
-            for(int y = gridY; y > 0; y--)
+            this.setLocation(16,16);
+            nodes = new Node[gridX+1][gridY+1];
+            for(int x = gridX; x > 0; x--)
             {
-                Node n = new Node();
-                getWorld().addObject(n, 32*x-16, 32*y-16);
-                
-                n.thisX = x;
-                n.thisY = y;
-                n.lehrer = this;
-                nodes[x][y] = n;
-                
-            }   
+                for(int y = gridY; y > 0; y--)
+                {
+                    Node n = new Node();
+                    getWorld().addObject(n, 32*x-16, 32*y-16);
+
+                    n.thisX = x;
+                    n.thisY = y;
+                    n.lehrer = this;
+                    nodes[x][y] = n;
+
+                }   
+            }
+            z++;
+            setCourse(5,5);
         }
-        z++;
-        findPath(31,17);
-        path = buildPath();
+        if(nodes[tarX][tarY] != null)
+        {
+            if(getX() != nodes[tarX][tarY].getX()||getY() != nodes[tarX][tarY].getY())
+            {
+            executePath();
+            }
+            else
+            {
+            setCourse(Greenfoot.getRandomNumber(36)+1,Greenfoot.getRandomNumber(22)+1);
+            }
+        } 
+
     }
-    if(getX() != nodes[tarX][tarY].getX()||getY() != nodes[tarX][tarY].getY())
-    executePath();
-    }   
-    
+
     public void findPath(int setX, int setY)
     {
         tarX=setX;
@@ -58,40 +67,40 @@ public class Lehrer extends Actor
         int ramY = getNearestNode().thisY;
         findeUmgebung(ramX,ramY);
         while(!closedNodes.contains(nodes[tarX][tarY])&& !openNodes.isEmpty())
-       {
+        {
             closedNodes.add(nodes[ramX][ramY]);
             openNodes.remove(nodes[ramX][ramY]);
             ramX = getLowestF().thisX;
             ramY = getLowestF().thisY;
             findeUmgebung(ramX,ramY);
-       }  
+        }  
     }
-    
-public Node getNearestNode()
-{
-    List<Node> nodes = getObjectsInRange(16, Node.class);
 
-    if (nodes.isEmpty())
+    public Node getNearestNode()
     {
-        return null;
+        List<Node> nodes = getObjectsInRange(16, Node.class);
+
+        if (nodes.isEmpty())
+        {
+            return null;
+        }
+
+        return nodes.get(0);
     }
 
-    return nodes.get(0);
-}
-    
     public Node getLowestF()
     {
-            Node best = openNodes.get(0);
+        Node best = openNodes.get(0);
 
-            for(Node n : openNodes)
-            {
-               if(n.fCost < best.fCost)
-               best = n;
-            }
+        for(Node n : openNodes)
+        {
+            if(n.fCost < best.fCost)
+                best = n;
+        }
 
-            return best;
+        return best;
     }
-    
+
     public void findeUmgebung(int x, int y)
     {
         addOpen(x+1, y,x,y);
@@ -99,7 +108,7 @@ public Node getNearestNode()
         addOpen(x, y+1,x,y);
         addOpen(x, y-1,x,y);
     }
-    
+
     public void addOpen(int x, int y,int px,int py)
     {
         if(x < 1 || x > gridX || y < 1 || y > gridY ) return;
@@ -108,70 +117,66 @@ public Node getNearestNode()
 
         if(openNodes.contains(n) || closedNodes.contains(n)) return;
 
-        n.calculateCost(1, 1, tarX, tarY);
+        n.calculateCost(getLowestF().thisX, getLowestF().thisY, tarX, tarY);
         n.parent = nodes[px][py];
         openNodes.add(n);
 
     }
 
-    
-        public void executePath() {
-            
-            Node next = new Node();
-            next = path.get(currentNode);
-            
-            if(getX()!= next.getX()|| getY()!= next.getY())
+    public void executePath() {
+        Node next = new Node();
+        next = path.get(currentNode);
+
+        if(getX()!= next.getX()|| getY()!= next.getY())
+        {
+            if(getX() >= next.getX())
             {
-              if(getX() > next.getX())
-              {
                 this.setLocation(getX()-1,getY());
-              }
-              else
-              {
-                this.setLocation(getX()+1,getY()); 
-              }
-              
-              if(getY() > next.getY())
-              {
-                this.setLocation(getX(),getY()-1);
-              }
-              else
-              {
-                this.setLocation(getX(),getY()+1); 
-              }
-            
             }
             else
             {
-            currentNode++;
+                this.setLocation(getX()+1,getY()); 
             }
+
+            if(getY() >= next.getY())
+            {
+                this.setLocation(getX(),getY()-1);
+            }
+            else
+            {
+                this.setLocation(getX(),getY()+1); 
+            }
+
+        }
+        else
+        {
+            currentNode++;
+        }
     }
+
     public List<Node> buildPath() {
         List<Node> path = new ArrayList<>();
         Node current = nodes[tarX][tarY];
-        
+
         while(current != null) {
             path.add(0, current); 
             current = current.parent;
         }
         return path;
     }
-    
+
     public void setCourse(int x, int y)
     {
-        
-        path = buildPath();
-        currentNode = 0;
-        openNodes.clear();
-        closedNodes.clear();
-        findPath(x,y);
-        
-       for(int xx = gridX; x > 0; x--)
+        currentNode = 0; 
+        for(Node n: closedNodes)
         {
-            for(int yy = gridY; y > 0; y--)
-            {
-                nodes[xx][yy].parent = null;
-            }   
+            n.clear();
         }
+        for(Node n: openNodes)
+        {
+            n.clear();
+        }
+        findPath(x,y);
+        path = buildPath();
     }
 }
