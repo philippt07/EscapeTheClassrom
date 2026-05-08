@@ -23,7 +23,7 @@ public class Lehrer extends Actor
     {
         if(z==0)
         {
-            this.setLocation(16,16);
+            this.setLocation(48,48);
             nodes = new Node[gridX+1][gridY+1];
             for(int x = gridX; x > 0; x--)
             {

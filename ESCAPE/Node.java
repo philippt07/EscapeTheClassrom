@@ -106,16 +106,16 @@ public class Node extends Actor
         
         //fCost
         
-        /*
-       if(getOneIntersectingObject(CornerOL.class)!=null||getOneIntersectingObject(CornerOR.class)!=null||getOneIntersectingObject(CornerUL.class)!=null || getOneIntersectingObject(CornerUR.class)!=null || getOneIntersectingObject(WandH.class)!=null||getOneIntersectingObject(WandV.class)!=null)
+      
+       if(getOneIntersectingObject(Wand.class)!=null )
        {
             fCost = 1000000;
        }
        else
-       {**/
+       {
         fCost = gCost + hCost;
         setRotation(90);
-       
+       }
     }
 }
 

@@ -20,13 +20,31 @@ public class Level1 extends World
         setBackground("images/boden01.png");
         prepare();
     }
-    /**
-     * Prepare the world for the start of the program.
-     * That is: create the initial objects and add them to the world.
-     */
+    
     private void prepare()
     {
+        baueRaum(0,0,36,22);
+        baueRaum(6,6,30,16);
         Lehrer lehrer = new Lehrer();
-        addObject(lehrer,14,13);
+        addObject(lehrer,33,33);
     }
+
+private void baueRaum(int x1, int y1, int x2, int y2)
+{
+    final int t = 32;
+
+    // OBEN + UNTEN
+    for(int x = x1; x <= x2; x++)
+    {
+        addObject(new Wand(), x * t, y1 * t);
+        addObject(new Wand(), x * t, y2 * t);
+    }
+
+    // LINKS + RECHTS
+    for(int y = y1 + 1; y < y2; y++)
+    {
+        addObject(new Wand(), x1 * t, y * t);
+        addObject(new Wand(), x2 * t, y * t);
+    }
+}
 }
