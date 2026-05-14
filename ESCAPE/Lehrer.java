@@ -50,7 +50,11 @@ public class Lehrer extends Actor
             }
             else
             {
-            setCourse(Greenfoot.getRandomNumber(36)+1,Greenfoot.getRandomNumber(22)+1);
+                int nX = Greenfoot.getRandomNumber(36)+1;
+                int nY = Greenfoot.getRandomNumber(22)+1;
+                if(nodes[nX][nY].Wand == false)
+                setCourse(nX,nY);
+
             }
         } 
 

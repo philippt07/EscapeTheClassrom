@@ -15,8 +15,6 @@ public class Wand extends Actor
     {
         if( r == 0)
         {
-
-          this.setLocation(getX()+16,getY()+16); 
           r++;
         }
         

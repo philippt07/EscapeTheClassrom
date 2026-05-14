@@ -11,6 +11,7 @@ public class Node extends Actor
     public Lehrer lehrer;
     public int thisX;
     public int thisY;
+    public boolean Wand;
     
     public float gCost;
     int gCostX;
@@ -110,6 +111,7 @@ public class Node extends Actor
        if(getOneIntersectingObject(Wand.class)!=null )
        {
             fCost = 1000000;
+            Wand = true;
        }
        else
        {
