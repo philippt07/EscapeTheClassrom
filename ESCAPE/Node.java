@@ -24,12 +24,20 @@ public class Node extends Actor
     public Node parent;
     public int py;
     public int px;
+    
+    int f = 0;
     public void act()
     {
                 if(parent != null)
         {
         py = parent.thisY;
         px = parent.thisX;
+       if(getOneIntersectingObject(Wand.class)!=null && f==0)
+       {
+            fCost = 100000;
+            f++;
+            Wand = true;
+       }
     }
     }
     
@@ -118,6 +126,7 @@ public class Node extends Actor
         fCost = gCost + hCost;
         setRotation(90);
        }
+
     }
 }
 

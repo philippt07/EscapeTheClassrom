@@ -14,8 +14,11 @@ public class Lehrer extends Actor
     int gridY=23;
     int tarX = 0;
     int tarY = 0;
+    
     int bild = 1;
     int wait = 0;
+    int animation =1;
+    
     Node[][] nodes;
     List<Node> openNodes   = new ArrayList<>();
     List<Node> closedNodes = new ArrayList<>();
@@ -24,7 +27,14 @@ public class Lehrer extends Actor
     public void act() 
     {
         wait--;
-
+        if(animation == 1)
+        {
+                animationR();
+        }
+                if(animation == 2)
+        {
+                animationL();
+        }
         if(z==0)
         {
             this.setLocation(48,48);
@@ -51,10 +61,7 @@ public class Lehrer extends Actor
             if(getX() != nodes[tarX][tarY].getX()||getY() != nodes[tarX][tarY].getY())
             {
                 executePath();
-                if(getX() <= nodes[tarX][tarY].getX())
-                animationR();
-                else
-                animationL();
+
             }
             else
             {
@@ -144,10 +151,12 @@ public class Lehrer extends Actor
             if(getX() >= next.getX())
             {
                 this.setLocation(getX()-1,getY());
+                animation=2;
             }
-            else
+            else if(getX() < next.getX())
             {
                 this.setLocation(getX()+1,getY()); 
+                animation=1;
             }
 
             if(getY() >= next.getY())
@@ -179,6 +188,7 @@ public class Lehrer extends Actor
 
     public void setCourse(int x, int y)
     {
+
         currentNode = 0; 
         for(Node n: closedNodes)
         {
@@ -190,6 +200,7 @@ public class Lehrer extends Actor
         }
         findPath(x,y);
         path = buildPath();
+        
     }
 
     public void animationR()
