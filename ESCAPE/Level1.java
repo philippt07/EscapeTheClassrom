@@ -24,7 +24,6 @@ public class Level1 extends World
     private void prepare()
     {
         baueRaum(0,0,36,22);
-        baueRaum(15,8,19,12);
         baueRaum(1,5,2,5);
         baueRaum(5,5,15,5);
         baueRaum(5,6,5,8);

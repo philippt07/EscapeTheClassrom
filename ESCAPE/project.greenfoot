@@ -1,5 +1,5 @@
 #Greenfoot project file
-class.Lehrer.image=man01.png
+class.Lehrer.image=teacherR01.png
 class.Node.image=leer01.png
 class.Wand.image=wand.png
 dependency1.from=Level1
@@ -14,10 +14,10 @@ dependency3.type=UsesDependency
 dependency4.from=Node
 dependency4.to=Lehrer
 dependency4.type=UsesDependency
-editor.fx.0.height=0
-editor.fx.0.width=0
-editor.fx.0.x=0
-editor.fx.0.y=0
+editor.fx.0.height=737
+editor.fx.0.width=814
+editor.fx.0.x=616
+editor.fx.0.y=122
 height=1118
 package.numDependencies=4
 package.numTargets=5

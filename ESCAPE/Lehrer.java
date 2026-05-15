@@ -14,6 +14,8 @@ public class Lehrer extends Actor
     int gridY=23;
     int tarX = 0;
     int tarY = 0;
+    int bild = 1;
+    int wait = 0;
     Node[][] nodes;
     List<Node> openNodes   = new ArrayList<>();
     List<Node> closedNodes = new ArrayList<>();
@@ -21,6 +23,8 @@ public class Lehrer extends Actor
     public int currentNode = 1;
     public void act() 
     {
+        wait--;
+
         if(z==0)
         {
             this.setLocation(48,48);
@@ -46,14 +50,18 @@ public class Lehrer extends Actor
         {
             if(getX() != nodes[tarX][tarY].getX()||getY() != nodes[tarX][tarY].getY())
             {
-            executePath();
+                executePath();
+                if(getX() <= nodes[tarX][tarY].getX())
+                animationR();
+                else
+                animationL();
             }
             else
             {
                 int nX = Greenfoot.getRandomNumber(36)+1;
                 int nY = Greenfoot.getRandomNumber(22)+1;
                 if(nodes[nX][nY].Wand == false)
-                setCourse(nX,nY);
+                    setCourse(nX,nY);
 
             }
         } 
@@ -182,5 +190,77 @@ public class Lehrer extends Actor
         }
         findPath(x,y);
         path = buildPath();
+    }
+
+    public void animationR()
+    {
+        switch(bild){
+            case 1:
+                if(wait<=0){
+                    setImage("teacherR01.png");
+                    bild++;
+                    wait=10;
+                }
+                break;
+            case 2:
+                if(wait==0){
+                    setImage("teacherR02.png");
+                    bild++;
+                    wait=10;
+                }
+                break;
+            case 3:
+                if(wait==0){
+                    setImage("teacherR01.png");
+                    bild++;
+                    wait=10;
+                }
+                break;
+            case 4:
+                if(wait<=0){
+                    setImage("teacherR03.png");
+                    bild=1;
+                    wait=10;
+                }
+                break;
+            default:
+        } 
+        
+        
+    }
+    
+    public void animationL()
+    {
+        switch(bild){
+            case 1:
+                if(wait<=0){
+                    setImage("teacherL01.png");
+                    bild++;
+                    wait=10;
+                }
+                break;
+            case 2:
+                if(wait==0){
+                    setImage("teacherL02.png");
+                    bild++;
+                    wait=10;
+                }
+                break;
+            case 3:
+                if(wait==0){
+                    setImage("teacherL01.png");
+                    bild++;
+                    wait=10;
+                }
+                break;
+            case 4:
+                if(wait<=0){
+                    setImage("teacherL03.png");
+                    bild=1;
+                    wait=10;
+                }
+                break;
+            default:
+        } 
     }
 }
